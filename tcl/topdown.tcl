@@ -155,7 +155,10 @@ if {[llength $debug_nets] > 0} {
     set_property DONT_TOUCH false $debug_nets
 }
 
-log_command opt_design $outputDir/opt_design.log
+# [sizhuo] don't do power opt for brams, save a lot of time
+#log_command opt_design $outputDir/opt_design.log
+log_command "opt_design -retarget -propconst -sweep" $outputDir/opt_design.log
+
 log_command "write_checkpoint -force $outputDir/$instance-post-opt.dcp" $outputDir/temp.log
 if {"$env(REPORT_NWORST_TIMING_PATHS)" != ""} {
     report_timing -nworst $env(REPORT_NWORST_TIMING_PATHS) -sort_by slack -path_type summary -slack_lesser_than 0.2 -unique_pins
